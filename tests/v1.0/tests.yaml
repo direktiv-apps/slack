@@ -1,0 +1,25 @@
+url: ""
+functions:
+- type: knative-workflow
+  id: slack
+  image: gcr.io/direktiv/functions/slack:test
+states:
+- id: state0
+  type: action
+  action:
+    function: slack
+    input:
+      commands:
+      - command: Example of running slack
+  transition: state1
+- id: state1
+  type: action
+  action:
+    function: slack
+    input:
+      commands:
+      - command: Example of running slack
+      files:
+      - data: Hello World
+        mode: "0755"
+        name: hello.txt

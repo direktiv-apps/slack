@@ -1,0 +1,159 @@
+swagger: "2.0"
+info:
+  description: Post messages to Slack
+  title: slack
+  version: "1.0"
+  x-direktiv-meta:
+    container: gcr.io/direktiv/functions/slack
+    maintainer: |-
+      [direktiv.io](https://www.direktiv.io) 
+    issues: https://github.com/direktiv-apps/slack/issues
+    url: https://github.com/direktiv-apps/slack  
+    categories:
+    - social
+    license: |-
+      [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
+    long-description: >-
+      This function can post messages to Slack channels. It is required to have a Slack account and an app create at the Slack [API portal](https://api.slack.com/apps). 
+      This function can send simple messages as well as blocks. 
+
+      After creating a Slack app an "Incoming Webhook" has to be created which is the `webhook-url` for this function. 
+consumes:
+- application/json
+produces:
+- application/json
+schemes:
+- http
+paths:
+  /: 
+    delete:
+      parameters:
+        - name: Direktiv-ActionID
+          in: header
+          type: string
+          description: |
+            On cancel Direktiv sends a DELETE request to
+            the action with id in the header
+      x-direktiv:
+        cancel: echo 'cancel {{ .DirektivActionID }}'
+      responses:
+        200:
+    post:
+      parameters:
+        - name: Direktiv-ActionID
+          in: header
+          type: string
+          default: development
+          description: |
+            direktiv action id is an UUID. 
+            For development it can be set to 'development'
+        - name: Direktiv-TempDir
+          in: header
+          type: string
+          default: /tmp
+          description: |
+            direktiv temp dir is the working directory for that request
+            For development it can be set to e.g. '/tmp'
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              webhook-url:
+                type: string
+                description: URL for Slack's incoming webhook
+              content:
+                type: object
+                additionalProperties: true
+      # direktiv code generation is configured here
+      x-direktiv-function: |-
+        functions:
+        - id: slack
+          image: gcr.io/direktiv/functions/slack:1.0
+          type: knative-workflow
+      x-direktiv-examples:
+        - title: Simple text
+          content: |-
+            - id: slack
+              type: action
+              action:
+                function: slack
+                secrets: ["webhook-url"]
+                input: 
+                  webhook-url: jq(.secrets."webhook-url")
+                content:
+                  text: Hello World
+        - title: Post with blocks
+          content: |-
+            - id: slack
+              type: action
+              action:
+                function: slack
+                secrets: ["webhook-url"]
+                input: 
+                  webhook-url: jq(.secrets."webhook-url")
+                  content:
+                    - type: section
+                      text:
+                        type: mrkdwn
+                        text: Test Me
+
+      x-direktiv-secrets:
+        - name: webhook-url
+          description: Incoming webhook URL from Slack
+      x-direktiv:  
+        cmds:
+        - action: exec
+          exec: |-
+            curl -X POST -H 'Content-type: application/json' --data '{{ .Content | toJson }}' {{ .WebhookURL }}
+        output: |
+          {
+            "slack": {{ index . 0 | toJson }}
+          }
+      x-direktiv-errors:
+        io.direktiv.command.error: Command execution failed
+        io.direktiv.output.error: Template error for output generation of the service
+        io.direktiv.ri.error: Can not create information object from request
+      responses:
+        200:
+          description: List of executed commands.
+          examples:
+            slack:
+            - result: ok
+              success: true
+          schema:
+            type: object
+            properties:
+              slack:
+                type: object
+                properties:
+                  result:
+                    type: string
+                  success:
+                    type: boolean
+        default:
+          description: generic error response
+          headers:
+            Direktiv-ErrorCode:
+              type: string
+            Direktiv-ErrorMessage:
+              type: string
+          schema:
+            $ref: "#/definitions/error"
+definitions:
+  direktivFile:
+    type: object
+    x-go-type:
+      type: DirektivFile
+      import:
+        package: github.com/direktiv/apps/go/pkg/apps 
+  error:
+    type: object
+    required:
+      - errorCode
+      - errorMessage
+    properties:
+      errorCode:
+        type: string
+      errorMessage:
+        type: string
