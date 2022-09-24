@@ -72,6 +72,10 @@ func init() {
                   "type": "object",
                   "additionalProperties": true
                 },
+                "verbose": {
+                  "description": "Enables verbose output",
+                  "type": "boolean"
+                },
                 "webhook-url": {
                   "description": "URL for Slack's incoming webhook",
                   "type": "string"
@@ -127,13 +131,15 @@ func init() {
           "cmds": [
             {
               "action": "exec",
-              "exec": "echo sending message to slack"
+              "exec": "echo sending message to slack",
+              "print": false,
+              "silent": false
             },
             {
               "action": "exec",
               "exec": "curl -X POST -H 'Content-type: application/json' --data '{{ .Content | toJson }}' {{ .WebhookURL }}",
-              "print": false,
-              "silent": true
+              "print": "{{ .Verbose }}",
+              "silent": "{{- if .Verbose }}false{{- else}}true{{- end }}"
             }
           ],
           "output": "{\n  \"slack\": {{ index . 1 | toJson }}\n}\n"
@@ -295,13 +301,15 @@ func init() {
           "cmds": [
             {
               "action": "exec",
-              "exec": "echo sending message to slack"
+              "exec": "echo sending message to slack",
+              "print": false,
+              "silent": false
             },
             {
               "action": "exec",
               "exec": "curl -X POST -H 'Content-type: application/json' --data '{{ .Content | toJson }}' {{ .WebhookURL }}",
-              "print": false,
-              "silent": true
+              "print": "{{ .Verbose }}",
+              "silent": "{{- if .Verbose }}false{{- else}}true{{- end }}"
             }
           ],
           "output": "{\n  \"slack\": {{ index . 1 | toJson }}\n}\n"
@@ -401,6 +409,10 @@ func init() {
         "content": {
           "type": "object",
           "additionalProperties": true
+        },
+        "verbose": {
+          "description": "Enables verbose output",
+          "type": "boolean"
         },
         "webhook-url": {
           "description": "URL for Slack's incoming webhook",

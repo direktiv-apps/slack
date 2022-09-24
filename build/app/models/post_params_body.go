@@ -20,6 +20,9 @@ type PostParamsBody struct {
 	// content
 	Content interface{} `json:"content,omitempty"`
 
+	// Enables verbose output
+	Verbose bool `json:"verbose,omitempty"`
+
 	// URL for Slack's incoming webhook
 	WebhookURL string `json:"webhook-url,omitempty"`
 }

@@ -135,6 +135,7 @@ functions:
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | content | [interface{}](#interface)| `interface{}` |  | |  |  |
+| verbose | boolean| `bool` |  | | Enables verbose output |  |
 | webhook-url | string| `string` |  | | URL for Slack's incoming webhook |  |
 
  

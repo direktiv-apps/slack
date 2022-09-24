@@ -65,6 +65,9 @@ paths:
               content:
                 type: object
                 additionalProperties: true
+              verbose:
+                type: boolean
+                description: Enables verbose output
       # direktiv code generation is configured here
       x-direktiv-function: |-
         functions:
@@ -105,11 +108,13 @@ paths:
         cmds:
         - action: exec
           exec: echo sending message to slack
+          silent: false
+          print: false
         - action: exec
           exec: |-
             curl -X POST -H 'Content-type: application/json' --data '{{ .Content | toJson }}' {{ .WebhookURL }}
-          print: false
-          silent: true
+          print: '{{ .Verbose }}'
+          silent: '{{- if .Verbose }}false{{- else}}true{{- end }}'
         output: |
           {
             "slack": {{ index . 1 | toJson }}
