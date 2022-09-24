@@ -46,15 +46,14 @@ Scenario: get request
 	"""
 	When method POST
 	Then status 200
-	# And match $ ==
-	# """
-	# {
-	# "slack": [
-	# {
-	# 	"result": "#notnull",
-	# 	"success": true
-	# }
-	# ]
-	# }
-	# """
+	And match $ ==
+	"""
+	{
+	"slack": 
+	{
+		"result": "#notnull",
+		"success": true
+	}
+	}
+	"""
 	
