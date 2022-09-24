@@ -9,17 +9,20 @@ states:
   action:
     function: slack
     input:
-      commands:
-      - command: Example of running slack
+      webhook-url: jq(.secrets."webhook-url")
+    secrets:
+    - webhook-url
   transition: state1
 - id: state1
   type: action
   action:
     function: slack
     input:
-      commands:
-      - command: Example of running slack
-      files:
-      - data: Hello World
-        mode: "0755"
-        name: hello.txt
+      content:
+      - text:
+          text: Test Me
+          type: mrkdwn
+        type: section
+      webhook-url: jq(.secrets."webhook-url")
+    secrets:
+    - webhook-url

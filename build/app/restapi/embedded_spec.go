@@ -127,10 +127,16 @@ func init() {
           "cmds": [
             {
               "action": "exec",
-              "exec": "curl -X POST -H 'Content-type: application/json' --data '{{ .Content | toJson }}' {{ .WebhookURL }}"
+              "exec": "echo sending message to slack"
+            },
+            {
+              "action": "exec",
+              "exec": "curl -X POST -H 'Content-type: application/json' --data '{{ .Content | toJson }}' {{ .WebhookURL }}",
+              "print": false,
+              "silent": true
             }
           ],
-          "output": "{\n  \"slack\": {{ index . 0 | toJson }}\n}\n"
+          "output": "{\n  \"slack\": {{ index . 1 | toJson }}\n}\n"
         },
         "x-direktiv-errors": {
           "io.direktiv.command.error": "Command execution failed",
@@ -289,10 +295,16 @@ func init() {
           "cmds": [
             {
               "action": "exec",
-              "exec": "curl -X POST -H 'Content-type: application/json' --data '{{ .Content | toJson }}' {{ .WebhookURL }}"
+              "exec": "echo sending message to slack"
+            },
+            {
+              "action": "exec",
+              "exec": "curl -X POST -H 'Content-type: application/json' --data '{{ .Content | toJson }}' {{ .WebhookURL }}",
+              "print": false,
+              "silent": true
             }
           ],
-          "output": "{\n  \"slack\": {{ index . 0 | toJson }}\n}\n"
+          "output": "{\n  \"slack\": {{ index . 1 | toJson }}\n}\n"
         },
         "x-direktiv-errors": {
           "io.direktiv.command.error": "Command execution failed",

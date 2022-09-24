@@ -104,11 +104,15 @@ paths:
       x-direktiv:  
         cmds:
         - action: exec
+          exec: echo sending message to slack
+        - action: exec
           exec: |-
             curl -X POST -H 'Content-type: application/json' --data '{{ .Content | toJson }}' {{ .WebhookURL }}
+          print: false
+          silent: true
         output: |
           {
-            "slack": {{ index . 0 | toJson }}
+            "slack": {{ index . 1 | toJson }}
           }
       x-direktiv-errors:
         io.direktiv.command.error: Command execution failed
