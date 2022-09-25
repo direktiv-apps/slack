@@ -72,10 +72,6 @@ func init() {
                   "type": "object",
                   "additionalProperties": true
                 },
-                "verbose": {
-                  "description": "Enables verbose output",
-                  "type": "boolean"
-                },
                 "webhook-url": {
                   "description": "URL for Slack's incoming webhook",
                   "type": "string"
@@ -86,20 +82,13 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "List of executed commands.",
+            "description": "Slack response",
             "schema": {
               "type": "object",
               "properties": {
                 "slack": {
                   "type": "object",
-                  "properties": {
-                    "result": {
-                      "type": "string"
-                    },
-                    "success": {
-                      "type": "boolean"
-                    }
-                  }
+                  "additionalProperties": true
                 }
               }
             },
@@ -130,19 +119,22 @@ func init() {
         "x-direktiv": {
           "cmds": [
             {
-              "action": "exec",
-              "exec": "echo sending message to slack",
+              "action": "http",
+              "data": {
+                "kind": "string",
+                "value": "{{ .Content | toJson }}"
+              },
+              "headers": [
+                {
+                  "Content-Type": "application/json"
+                }
+              ],
+              "method": "POST",
               "print": false,
-              "silent": false
-            },
-            {
-              "action": "exec",
-              "exec": "curl -X POST -H 'Content-type: application/json' --data '{{ .Content | toJson }}' {{ .WebhookURL }}",
-              "print": "{{ .Verbose }}",
-              "silent": "{{- if .Verbose }}false{{- else}}true{{- end }}"
+              "url": "{{ .WebhookURL }}"
             }
           ],
-          "output": "{\n  \"slack\": {{ index . 1 | toJson }}\n}\n"
+          "output": "{\n  \"slack\": {{ index . 0 | toJson }}\n}\n"
         },
         "x-direktiv-errors": {
           "io.direktiv.command.error": "Command execution failed",
@@ -269,7 +261,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "List of executed commands.",
+            "description": "Slack response",
             "schema": {
               "$ref": "#/definitions/postOKBody"
             },
@@ -300,19 +292,22 @@ func init() {
         "x-direktiv": {
           "cmds": [
             {
-              "action": "exec",
-              "exec": "echo sending message to slack",
+              "action": "http",
+              "data": {
+                "kind": "string",
+                "value": "{{ .Content | toJson }}"
+              },
+              "headers": [
+                {
+                  "Content-Type": "application/json"
+                }
+              ],
+              "method": "POST",
               "print": false,
-              "silent": false
-            },
-            {
-              "action": "exec",
-              "exec": "curl -X POST -H 'Content-type: application/json' --data '{{ .Content | toJson }}' {{ .WebhookURL }}",
-              "print": "{{ .Verbose }}",
-              "silent": "{{- if .Verbose }}false{{- else}}true{{- end }}"
+              "url": "{{ .WebhookURL }}"
             }
           ],
-          "output": "{\n  \"slack\": {{ index . 1 | toJson }}\n}\n"
+          "output": "{\n  \"slack\": {{ index . 0 | toJson }}\n}\n"
         },
         "x-direktiv-errors": {
           "io.direktiv.command.error": "Command execution failed",
@@ -386,19 +381,8 @@ func init() {
       "type": "object",
       "properties": {
         "slack": {
-          "$ref": "#/definitions/postOKBodySlack"
-        }
-      },
-      "x-go-gen-location": "operations"
-    },
-    "postOKBodySlack": {
-      "type": "object",
-      "properties": {
-        "result": {
-          "type": "string"
-        },
-        "success": {
-          "type": "boolean"
+          "type": "object",
+          "additionalProperties": true
         }
       },
       "x-go-gen-location": "operations"
@@ -409,10 +393,6 @@ func init() {
         "content": {
           "type": "object",
           "additionalProperties": true
-        },
-        "verbose": {
-          "description": "Enables verbose output",
-          "type": "boolean"
         },
         "webhook-url": {
           "description": "URL for Slack's incoming webhook",

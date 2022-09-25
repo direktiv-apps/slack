@@ -10,4 +10,4 @@ if [[ -z "${DIREKTIV_SECRET_webhookurl}" ]]; then
 	exit 1
 fi
 
-docker run --network=host -v `pwd`/tests/:/tests direktiv/karate java -DtestURL=${DIREKTIV_TEST_URL} -Dlogback.configurationFile=/logging.xml -Dwebhookurl="'${DIREKTIV_SECRET_webhookurl}'"  -jar /karate.jar /tests/v1.0/karate.yaml.test.feature ${*:1}
+docker run --network=host -v `pwd`/tests/:/tests direktiv/karate java -DtestURL=${DIREKTIV_TEST_URL} -Dlogback.configurationFile=/logging.xml -Dwebhookurl="${DIREKTIV_SECRET_webhookurl}"  -jar /karate.jar /tests/v1.0/karate.yaml.test.feature ${*:1}

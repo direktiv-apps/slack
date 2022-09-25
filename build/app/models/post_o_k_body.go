@@ -8,7 +8,6 @@ package models
 import (
 	"context"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -19,69 +18,16 @@ import (
 type PostOKBody struct {
 
 	// slack
-	Slack *PostOKBodySlack `json:"slack,omitempty"`
+	Slack interface{} `json:"slack,omitempty"`
 }
 
 // Validate validates this post o k body
 func (m *PostOKBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.validateSlack(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }
 
-func (m *PostOKBody) validateSlack(formats strfmt.Registry) error {
-	if swag.IsZero(m.Slack) { // not required
-		return nil
-	}
-
-	if m.Slack != nil {
-		if err := m.Slack.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("slack")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("slack")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-// ContextValidate validate this post o k body based on the context it is used
+// ContextValidate validates this post o k body based on context it is used
 func (m *PostOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.contextValidateSlack(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *PostOKBody) contextValidateSlack(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Slack != nil {
-		if err := m.Slack.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("slack")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("slack")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 

@@ -16,7 +16,7 @@ Scenario: get request
 	And request
 	"""
 	{
-		"webhook-url": #(webhookurl),
+		"webhook-url": "#(webhookurl)",
 		"content": {
 			"text": "Hello World",
 			"blocks": [
@@ -45,15 +45,15 @@ Scenario: get request
 	}
 	"""
 	When method POST
-	Then status 200
-	And match $ ==
-	"""
-	{
-	"slack": 
-	{
-		"result": "#notnull",
-		"success": true
-	}
-	}
-	"""
+	# Then status 200
+	# And match $ ==
+	# """
+	# {
+	# "slack": 
+	# {
+	# 	"result": "#notnull",
+	# 	"success": true
+	# }
+	# }
+	# """
 	
