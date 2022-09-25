@@ -71,7 +71,7 @@ functions:
 [PostParamsBody](#post-params-body)
 
 ### Response
-  List of executed commands.
+  Slack response
 #### Reponse Types
     
   
@@ -107,21 +107,7 @@ functions:
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| slack | [PostOKBodySlack](#post-o-k-body-slack)| `PostOKBodySlack` |  | |  |  |
-
-
-#### <span id="post-o-k-body-slack"></span> postOKBodySlack
-
-  
-
-
-
-**Properties**
-
-| Name | Type | Go type | Required | Default | Description | Example |
-|------|------|---------|:--------:| ------- |-------------|---------|
-| result | string| `string` |  | |  |  |
-| success | boolean| `bool` |  | |  |  |
+| slack | [interface{}](#interface)| `interface{}` |  | |  |  |
 
 
 #### <span id="post-params-body"></span> postParamsBody
@@ -135,7 +121,6 @@ functions:
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | content | [interface{}](#interface)| `interface{}` |  | |  |  |
-| verbose | boolean| `bool` |  | | Enables verbose output |  |
 | webhook-url | string| `string` |  | | URL for Slack's incoming webhook |  |
 
  
