@@ -34,8 +34,8 @@ functions:
     secrets: ["webhook-url"]
     input: 
       webhook-url: jq(.secrets."webhook-url")
-    content:
-      text: Hello World
+      content:
+        text: Hello World
 ```
    #### Post with blocks
 ```yaml
@@ -47,10 +47,11 @@ functions:
     input: 
       webhook-url: jq(.secrets."webhook-url")
       content:
+        blocks:
         - type: section
           text:
             type: mrkdwn
-            text: Test Me
+            text: 'this is text'
 ```
 
    ### Secrets

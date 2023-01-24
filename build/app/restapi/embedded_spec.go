@@ -130,7 +130,6 @@ func init() {
                 }
               ],
               "method": "POST",
-              "print": false,
               "url": "{{ .WebhookURL }}"
             }
           ],
@@ -143,7 +142,7 @@ func init() {
         },
         "x-direktiv-examples": [
           {
-            "content": "- id: slack\n  type: action\n  action:\n    function: slack\n    secrets: [\"webhook-url\"]\n    input: \n      webhook-url: jq(.secrets.\"webhook-url\")\n    content:\n      text: Hello World",
+            "content": "- id: slack\n  type: action\n  action:\n    function: slack\n    secrets: [\"webhook-url\"]\n    input: \n      webhook-url: jq(.secrets.\"webhook-url\")\n      content:\n        text: Hello World",
             "title": "Simple text"
           },
           {
@@ -303,7 +302,6 @@ func init() {
                 }
               ],
               "method": "POST",
-              "print": false,
               "url": "{{ .WebhookURL }}"
             }
           ],
@@ -316,7 +314,7 @@ func init() {
         },
         "x-direktiv-examples": [
           {
-            "content": "- id: slack\n  type: action\n  action:\n    function: slack\n    secrets: [\"webhook-url\"]\n    input: \n      webhook-url: jq(.secrets.\"webhook-url\")\n    content:\n      text: Hello World",
+            "content": "- id: slack\n  type: action\n  action:\n    function: slack\n    secrets: [\"webhook-url\"]\n    input: \n      webhook-url: jq(.secrets.\"webhook-url\")\n      content:\n        text: Hello World",
             "title": "Simple text"
           },
           {

@@ -118,7 +118,7 @@ func PostDirektivHandle(params PostParams) middleware.Responder {
 	s, err := templateString(`{
   "slack": {{ index . 0 | toJson }}
 }
-`, responses)
+`, responses, ri.Dir())
 	if err != nil {
 		return generateError(outErr, err)
 	}
@@ -156,24 +156,24 @@ func runCommand0(ctx context.Context,
 		insecure, err200, debug     bool
 	}
 
-	baseInfo := func(paramsIn interface{}) (*baseRequest, error) {
+	baseInfo := func(paramsIn interface{}, dir string) (*baseRequest, error) {
 
-		u, err := templateString(`{{ .WebhookURL }}`, paramsIn)
+		u, err := templateString(`{{ .WebhookURL }}`, paramsIn, dir)
 		if err != nil {
 			return nil, err
 		}
 
-		method, err := templateString(`POST`, paramsIn)
+		method, err := templateString(`POST`, paramsIn, dir)
 		if err != nil {
 			return nil, err
 		}
 
-		user, err := templateString(`<no value>`, paramsIn)
+		user, err := templateString(`<no value>`, paramsIn, dir)
 		if err != nil {
 			return nil, err
 		}
 
-		password, err := templateString(`<no value>`, paramsIn)
+		password, err := templateString(`<no value>`, paramsIn, dir)
 		if err != nil {
 			return nil, err
 		}
@@ -189,28 +189,32 @@ func runCommand0(ctx context.Context,
 		}, nil
 
 	}
-	br, err := baseInfo(at)
+	br, err := baseInfo(at, ri.Dir())
 	if err != nil {
 		ir[resultKey] = err.Error()
 		return ir, err
 	}
 
 	headers := make(map[string]string)
-	Header0, err := templateString(`application/json`, params)
+	Header0, err := templateString(`application/json`, params, ri.Dir())
 	headers["Content-Type"] = Header0
 
 	var data []byte
 
-	attachData := func(paramsIn interface{}, ri *apps.RequestInfo) ([]byte, error) {
+	attachData := func(paramsIn interface{}, ri *apps.RequestInfo, dir string) ([]byte, error) {
 
-		kind, err := templateString(`string`, paramsIn)
+		kind, err := templateString(`string`, paramsIn, dir)
 		if err != nil {
 			return nil, err
 		}
 
-		d, err := templateString(`{{ .Content | toJson }}`, paramsIn)
+		d, err := templateString(`{{ .Content | toJson }}`, paramsIn, dir)
 		if err != nil {
 			return nil, err
+		}
+
+		if string(d) == "empty" {
+			return []byte("{}"), nil
 		}
 
 		if kind == "file" {
@@ -223,10 +227,15 @@ func runCommand0(ctx context.Context,
 
 	}
 
-	data, err = attachData(at, ri)
+	data, err = attachData(at, ri, ri.Dir())
 	if err != nil {
 		ir[resultKey] = err.Error()
 		return ir, err
+	}
+
+	if br.debug {
+		ri.Logger().Infof("Payload:")
+		ri.Logger().Infof(string(data))
 	}
 
 	if br.debug {

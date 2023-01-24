@@ -81,8 +81,8 @@ paths:
                 secrets: ["webhook-url"]
                 input: 
                   webhook-url: jq(.secrets."webhook-url")
-                content:
-                  text: Hello World
+                  content:
+                    text: Hello World
         - title: Post with blocks
           content: |-
             - id: slack
@@ -93,11 +93,11 @@ paths:
                 input: 
                   webhook-url: jq(.secrets."webhook-url")
                   content:
+                    blocks:
                     - type: section
                       text:
                         type: mrkdwn
-                        text: Test Me
-
+                        text: 'this is text'
       x-direktiv-secrets:
         - name: webhook-url
           description: Incoming webhook URL from Slack
@@ -111,7 +111,6 @@ paths:
           data: 
             kind: string
             value: '{{ .Content | toJson }}'
-          print: false
         output: |
             {
               "slack": {{ index . 0 | toJson }}
