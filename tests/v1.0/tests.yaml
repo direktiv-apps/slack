@@ -9,6 +9,8 @@ states:
   action:
     function: slack
     input:
+      content:
+        text: Hello World
       webhook-url: jq(.secrets."webhook-url")
     secrets:
     - webhook-url
@@ -19,10 +21,11 @@ states:
     function: slack
     input:
       content:
-      - text:
-          text: Test Me
-          type: mrkdwn
-        type: section
+        blocks:
+        - text:
+            text: this is text
+            type: mrkdwn
+          type: section
       webhook-url: jq(.secrets."webhook-url")
     secrets:
     - webhook-url

@@ -146,7 +146,7 @@ func init() {
             "title": "Simple text"
           },
           {
-            "content": "- id: slack\n  type: action\n  action:\n    function: slack\n    secrets: [\"webhook-url\"]\n    input: \n      webhook-url: jq(.secrets.\"webhook-url\")\n      content:\n        - type: section\n          text:\n            type: mrkdwn\n            text: Test Me",
+            "content": "- id: slack\n  type: action\n  action:\n    function: slack\n    secrets: [\"webhook-url\"]\n    input: \n      webhook-url: jq(.secrets.\"webhook-url\")\n      content:\n        blocks:\n        - type: section\n          text:\n            type: mrkdwn\n            text: 'this is text'",
             "title": "Post with blocks"
           }
         ],
@@ -318,7 +318,7 @@ func init() {
             "title": "Simple text"
           },
           {
-            "content": "- id: slack\n  type: action\n  action:\n    function: slack\n    secrets: [\"webhook-url\"]\n    input: \n      webhook-url: jq(.secrets.\"webhook-url\")\n      content:\n        - type: section\n          text:\n            type: mrkdwn\n            text: Test Me",
+            "content": "- id: slack\n  type: action\n  action:\n    function: slack\n    secrets: [\"webhook-url\"]\n    input: \n      webhook-url: jq(.secrets.\"webhook-url\")\n      content:\n        blocks:\n        - type: section\n          text:\n            type: mrkdwn\n            text: 'this is text'",
             "title": "Post with blocks"
           }
         ],
